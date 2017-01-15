@@ -26,6 +26,7 @@ class NetworkState:
         handler.load_module("ircd.handlers.mode")
         handler.load_module("ircd.handlers.whois")
         handler.load_module("ircd.handlers.message")
+        handler.load_module("ircd.handlers.channel")
         handler.load_module("ircd.handlers.unknown")
 
     async def handle_new_client(self, reader, writer):

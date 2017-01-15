@@ -38,7 +38,7 @@ class Client:
     def shared_channel_members(self):
         result = set()
         for channel in self.channels:
-            result |= channel.clients
+            result |= set(channel.clients.keys())
         return result
 
     @property
@@ -91,10 +91,10 @@ class Client:
         self.send_all(self.shared_channel_members_except_me, message, **kwargs)
 
     def send_to_channel(self, channel, message=None, **kwargs):
-        self.send_all(channel.clients, message, **kwargs)
+        self.send_all(channel.clients.keys(), message, **kwargs)
 
     def send_to_channel_except_me(self, channel, message=None, **kwargs):
-        self.send_all(channel.clients - {self}, message, **kwargs)
+        self.send_all(set(channel.clients.keys()) - {self}, message, **kwargs)
 
     # connection maintenance
 
@@ -104,7 +104,7 @@ class Client:
 
         self.disconnected = True
         for channel in self.channels:
-            channel.clients.discard(self)
+            channel.clients.pop(self)
 
         self.network.clients.all_clients.discard(self)
         if self.nick:

@@ -5,7 +5,7 @@ C-type modes require a parameter on add, and don't take one on remove.
 D-type modes don't require a parameter.
 """
 
-channel_modes = ("b", "k", "l", "n") # bqeI,k,l,imntps...
+channel_modes = ("b", "k", "l", "imntps") # bqeI,k,l,imntps...
 user_modes = "iws"
 
 prefixes = (("o", "@"), ("v", "+"))
@@ -20,6 +20,12 @@ class UnknownMode(ValueError):
 def prefix_sort(s):
     letters = [i[0] for i in prefixes]
     return "".join(sorted(s, key=letters.index))
+
+def highest_prefix(s):
+    s = prefix_sort(s)
+    if not s:
+        return ""
+    return [i[1] for i in prefixes if i[0] == s[0]][0]
 
 def parse_modes(modes, on_channel):
     """

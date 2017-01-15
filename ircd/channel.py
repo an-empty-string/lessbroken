@@ -1,5 +1,9 @@
 """irc2-ircd channel state"""
 
+from .helpers.modes import unparse_modes, channel_modes, highest_prefix
+from .strings import get_string
+from .utils import chunks
+
 import collections
 import datetime
 
@@ -13,6 +17,22 @@ class Channel:
         self.clients = collections.defaultdict(str)
         self.modes = {}
         self.ts = datetime.datetime.now()
+
+    @property
+    def names_prefix(self):
+        if "p" in self.modes:
+            return "*"
+        if "s" in self.modes:
+            return "@"
+        return "="
+
+    # utilities
+
+    def send_names_to(self, client):
+        for chunk in chunks(sorted(self.clients.keys(), key=lambda c: c.nick), 20):  # really just arbitrary
+            data = " ".join([highest_prefix(self.clients[c]) + c.nick for c in chunk])
+            client.send_numeric("RPL_NAMREPLY", self.names_prefix, self.name, data)
+        client.send_numeric("RPL_ENDOFNAMES", self.name, get_string("names_done"))
 
 class Channels:
     def __init__(self, network):
