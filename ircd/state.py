@@ -32,8 +32,8 @@ class NetworkState:
         client = self.clients.new(reader, writer)
         logger.debug("Got new client {}".format(client.id))
         while True:
-            line = await client.readln()
             if client.is_disconnected():
                 return
 
+            line = await client.readln()
             await handler.dispatch_to_handlers(self, client, line)

@@ -28,6 +28,7 @@ class Client:
 
         self.last_ping_sent = None
         self.last_ping_reply = None
+        self.disconnected = False
 
     @property
     def hostmask(self):
@@ -35,14 +36,14 @@ class Client:
 
     @property
     def shared_channel_members(self):
-        result = {}
+        result = set()
         for channel in self.channels:
             result |= channel.clients
         return result
 
     @property
     def shared_channel_members_except_me(self):
-        return shared_channel_members - {self}
+        return self.shared_channel_members - {self}
 
     # low-level stuff
 
@@ -98,9 +99,18 @@ class Client:
     # connection maintenance
 
     def disconnect(self):
+        if self.disconnected:
+            return
+
+        self.disconnected = True
+        for channel in self.channels:
+            channel.clients.discard(self)
+
         self.network.clients.all_clients.discard(self)
         if self.nick:
             self.network.clients.by_nickname.pop(self.nick, None)
+
+        self.writer.close()
 
     def is_disconnected(self):
         if self.reader.at_eof():

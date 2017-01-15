@@ -43,4 +43,22 @@ async def post_registration_nick(network, client, message):
 @handler(verb="QUIT")
 @require_unregistered(soft=True)
 async def quit_preregistration(network, client, message):
-    pass
+    client.send(verb="ERROR", params=["Closing link (preregistration client quit)"])
+    client.disconnect()
+
+def do_client_quit(client, message):
+    client.send_shared_channel_members_except_me(verb="QUIT", params=[message])
+    client.send(source=client.hostmask, verb="QUIT", params=[message])
+    client.send(verb="ERROR", params=["Closing link"])
+    client.disconnect()
+
+@handler(verb="QUIT")
+@require_registered()
+@require_arguments(1, soft=True)
+async def quit_postregistration_with_reason(network, client, message):
+    do_client_quit(client, "Quit: {}".format(message.params[0]))
+
+@handler(verb="QUIT")
+@require_registered()
+async def quit_postregistration_with_reason(network, client, message):
+    do_client_quit(client, "Quit: client disconnecting")
