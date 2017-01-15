@@ -26,13 +26,20 @@ class Channel:
             return "@"
         return "="
 
-    # utilities
+    # send utilities
 
     def send_names_to(self, client):
         for chunk in chunks(sorted(self.clients.keys(), key=lambda c: c.nick), 20):  # really just arbitrary
             data = " ".join([highest_prefix(self.clients[c]) + c.nick for c in chunk])
             client.send_numeric("RPL_NAMREPLY", self.names_prefix, self.name, data)
         client.send_numeric("RPL_ENDOFNAMES", self.name, get_string("names_done"))
+
+    # permission checks
+
+    def user_can_send(self, client):
+        if "n" in self.modes and client not in self.clients:
+            return False
+        return True
 
 class Channels:
     def __init__(self, network):
