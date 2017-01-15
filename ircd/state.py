@@ -24,6 +24,7 @@ class NetworkState:
         handler.load_module("ircd.handlers.pong")
         handler.load_module("ircd.handlers.registration")
         handler.load_module("ircd.handlers.mode")
+        handler.load_module("ircd.handlers.whois")
         handler.load_module("ircd.handlers.message")
         handler.load_module("ircd.handlers.unknown")
 

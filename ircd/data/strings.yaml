@@ -3,6 +3,9 @@ welcome: "Welcome to the {network} network, {hostmask}"
 yourhost: "Your host is {host}, running Lessbroken IRCd v0.0.1"
 are_supported: "supported by this server"
 
+## whois
+whois_done: "End of WHOIS."
+
 ## errors
 unknown_command: "{} is unknown command to me"
 unknown_mode: "Received an unknown mode character"

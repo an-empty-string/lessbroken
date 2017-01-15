@@ -40,6 +40,10 @@ class Client:
             result |= channel.clients
         return result
 
+    @property
+    def shared_channel_members_except_me(self):
+        return shared_channel_members - {self}
+
     # low-level stuff
 
     def writeln(self, line):
@@ -69,6 +73,27 @@ class Client:
         args = [self.nick if self.registered else "*"] + list(args)
         self.send(source=self.network.config["server"]["name"],
                 verb=get_numeric(numeric), params=args)
+
+    # message sending to other clients
+
+    def send_all(self, group, message=None, **kwargs):
+        if "source" not in kwargs:
+            kwargs["source"] = self.hostmask
+
+        for i in group:
+            i.send(message, **kwargs)
+
+    def send_shared_channel_members(self, message=None, **kwargs):
+        self.send_all(self.shared_channel_members, message, **kwargs)
+
+    def send_shared_channel_members_except_me(self, message=None, **kwargs):
+        self.send_all(self.shared_channel_members_except_me, message, **kwargs)
+
+    def send_to_channel(self, channel, message=None, **kwargs):
+        self.send_all(channel.clients, message, **kwargs)
+
+    def send_to_channel_except_me(self, channel, message=None, **kwargs):
+        self.send_all(channel.clients - {self}, message, **kwargs)
 
     # connection maintenance
 

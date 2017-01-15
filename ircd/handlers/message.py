@@ -7,7 +7,7 @@ def do_send(verb, network, client, message):
     if any(target.startswith(i) for i in network.config["server"]["chantypes"]):
         pass
     elif target not in network.clients.by_nickname:
-        client.send_numeric("ERR_NOSUCHNICK", get_string("unknown_nickname"))
+        client.send_numeric("ERR_NOSUCHNICK", target, get_string("unknown_nickname"))
     elif target in network.clients.by_nickname:
         network.clients.by_nickname[target].send(source=client.hostmask,
                 verb=verb, params=[target, text])

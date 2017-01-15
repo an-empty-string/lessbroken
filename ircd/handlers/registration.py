@@ -39,3 +39,8 @@ async def post_registration_nick(network, client, message):
         del network.clients.by_nickname[old_nickname]
         client.nick = new_nickname
         client.send(source=old_hostmask, verb="NICK", params=[new_nickname])
+
+@handler(verb="QUIT")
+@require_unregistered(soft=True)
+async def quit_preregistration(network, client, message):
+    pass
