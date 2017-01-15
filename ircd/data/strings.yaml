@@ -1,0 +1,14 @@
+## welcome sequence
+welcome: "Welcome to the {network} network, {hostmask}"
+yourhost: "Your host is {host}, running Lessbroken IRCd v0.0.1"
+are_supported: "supported by this server"
+
+## errors
+unknown_command: "{} is unknown command to me"
+unknown_mode: "Received an unknown mode character"
+unknown_nickname: "No such nickname"
+nick_in_use: "Nickname is already in use"
+not_registered: "You are not registered"
+already_registered: "You are already registered"
+more_params: "Not enough arguments for that command"
+users_dont_match: "Cannot view or set modes for other users"

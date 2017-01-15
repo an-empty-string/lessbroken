@@ -1,0 +1,21 @@
+server:
+    name: irc.testnet.com
+    network: testnet
+    chantypes: "#"
+
+limits:
+    nicklen: 15
+    kicklen: 300
+    awaylen: 300
+    topiclen: 300
+    chanlen: 32
+    maxtargets: 8
+    modes: 4
+
+    listlimit:
+        b: 50
+
+    chanlimit:
+        "#": 25
+
+ping: 120
