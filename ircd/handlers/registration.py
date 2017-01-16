@@ -1,6 +1,8 @@
 from .handler import handler
 from .utils import require_unregistered, require_registered, require_arguments
 from ..helpers.registration import check_registered
+from ..helpers.valid import valid_nick
+from ..strings import get_string
 
 @handler(verb="USER")
 @require_unregistered()
@@ -18,6 +20,8 @@ async def pre_registration_nick(network, client, message):
     nickname = message.params[0]
     if nickname in network.clients.by_nickname:
         client.send_numeric("ERR_NICKNAMEINUSE", nickname)
+    elif not valid_nick(network, nickname):
+        client.send_numeric("ERR_ERRONEUSNICKNAME", get_string("bad_nickname"))
     else:
         client.nick = nickname
         network.clients.by_nickname[nickname] = client
@@ -33,6 +37,8 @@ async def post_registration_nick(network, client, message):
 
     if new_nickname in network.clients.by_nickname:
         client.send_numeric("ERR_NICKNAMEINUSE", new_nickname)
+    elif not valid_nick(network, new_nickname):
+        client.send_numeric("ERR_ERRONEUSNICKNAME", get_string("bad_nickname"))
     else:
         network.clients.by_nickname[new_nickname] = client
         del network.clients.by_nickname[old_nickname]
