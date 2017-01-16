@@ -2,7 +2,6 @@ from .handler import handler
 from .utils import require_registered, require_arguments
 from ..strings import get_string
 from ..helpers import channel
-from ircreactor.envelope import RFC1459Message
 
 @handler(verb="JOIN")
 @require_registered()
@@ -20,7 +19,7 @@ async def join_channel(network, client, message):
 @handler(verb="PART")
 @require_registered()
 @require_arguments(1)
-async def join_channel(network, client, message):
+async def part_channel(network, client, message):
     chantypes = network.config["server"]["chantypes"]
     targets = message.params[0].split(",")[:network.config["limits"]["maxtargets"]]
     reason = message.params[1] if len(message.params) > 1 else "Leaving"

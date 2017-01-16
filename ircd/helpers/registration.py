@@ -1,5 +1,4 @@
 from .isupport import send_isupport
-from ..numerics import get_numeric
 from ..strings import get_string
 
 import logging

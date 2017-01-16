@@ -1,3 +1,5 @@
+from ..casemap import canonicalize
+
 def user_in_channel(client, channel_name):
     if not client.network.channels.exists(channel_name):
         return False
@@ -24,5 +26,5 @@ def remove_user_from_channel(client, channel_name, reason):
     client.channels.remove(channel)
 
     if not channel.clients:
-        client.network.channels.by_name.pop(channel.name)
+        client.network.channels.by_name.pop(canonicalize(channel.name))
     return True

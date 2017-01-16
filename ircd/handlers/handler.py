@@ -1,9 +1,11 @@
 from ircreactor.envelope import RFC1459Message
-from ..pattern import match, ANY
+from ..pattern import match
 import importlib
 
 import logging
 logger = logging.getLogger("ircd.handlers.handler")
+
+ANY = None
 
 handlers = []
 modules = {}

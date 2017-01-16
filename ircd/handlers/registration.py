@@ -1,6 +1,5 @@
 from .handler import handler
 from .utils import require_unregistered, require_registered, require_arguments
-from ..strings import get_string
 from ..helpers.registration import check_registered
 
 @handler(verb="USER")
@@ -39,6 +38,8 @@ async def post_registration_nick(network, client, message):
         del network.clients.by_nickname[old_nickname]
         client.nick = new_nickname
         client.send(source=old_hostmask, verb="NICK", params=[new_nickname])
+        client.send_shared_channel_members_except_me(source=old_hostmask, verb="NICK",
+                params=[new_nickname])
 
 @handler(verb="QUIT")
 @require_unregistered(soft=True)
@@ -60,5 +61,5 @@ async def quit_postregistration_with_reason(network, client, message):
 
 @handler(verb="QUIT")
 @require_registered()
-async def quit_postregistration_with_reason(network, client, message):
+async def quit_postregistration_without_reason(network, client, message):
     do_client_quit(client, "Quit: client disconnecting")

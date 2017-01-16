@@ -19,7 +19,7 @@ class UnknownMode(ValueError):
 
 def prefix_sort(s):
     letters = [i[0] for i in prefixes]
-    return "".join(sorted(s, key=letters.index))
+    return "".join(sorted(set(s), key=letters.index))
 
 def highest_prefix(s):
     s = prefix_sort(s)
